@@ -21,7 +21,7 @@ def keep_alive():
     t.start()
 
 # 2️⃣ إعداد توكن التيليجرام الخاص ببوتك (تم الحفظ بنجاح يا حمد ✅)
-TOKEN = "8627412491:AAHyaygQ8Oz0nQhPl7Yej1DAgGk-28TB194"
+TOKEN = "8627412491:AAHF0yOhd_lzaK-imMtU_SpFuV8aw1KEEfQ"
 bot = TeleBot(TOKEN)
 
 # 3️⃣ إعداد مفتاح ذكاء جوجل جمناي (تم الحفظ بنجاح يا حمد ✅)
