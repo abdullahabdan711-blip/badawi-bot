@@ -27,7 +27,9 @@ bot = TeleBot(TOKEN)
 # 3️⃣ إعداد مفتاح ذكاء جوجل جمناي (تم الحفظ بنجاح يا حمد ✅)
 GEMINI_KEY = "AIzaSyDZiFiZ2XDuHwYeqMOYVoBxqS3j1y9qVXU"
 genai.configure(api_key=GEMINI_KEY)
-model = genai.GenerativeModel('gemini-pro')
+# استخدام الإصدار الأحدث من جيمني
+model = genai.GenerativeModel('gemini-1.5-flash')
+
 
 DEVELOPER_USER = "HAMAD_A21"
 users_bank = {}
