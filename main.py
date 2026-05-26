@@ -3,36 +3,31 @@ import logging
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters
 from dotenv import load_dotenv
-import openai
+import google.generativeai as genai
 
-# تحميل التوكن من ملف .env
+# تحميل الإعدادات
 load_dotenv()
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
-openai.api_key = OPENAI_API_KEY
+# إعداد Gemini
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel('gemini-pro')
 
-# إعداد السجلات (Logs) لمتابعة حالة البوت
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="أبشر! بدوي في الخدمة، وش بغيت يا خوي؟")
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="حيّ الله من لفانا! معك 'بدوي'، وش تبي نستشيره فيه؟")
 
-async def chat_with_ai(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # هنا يتم الربط مع الذكاء الاصطناعي
+async def chat_with_gemini(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_text = update.message.text
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": user_text}]
-    )
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=response.choices[0].message.content)
+    # إرسال الرسالة لـ Gemini
+    response = model.generate_content(f"أنت بوت اسمك بدوي، ترد بلهجة بدوية أصيلة ومختصرة. العضو قال: {user_text}")
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=response.text)
 
 if __name__ == '__main__':
     application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
-    
-    # أوامر البوت
     application.add_handler(CommandHandler('start', start))
-    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), chat_with_ai))
-    
+    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), chat_with_gemini))
     application.run_polling()
     
